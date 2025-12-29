@@ -1,0 +1,61 @@
+{
+  "_generated": true,
+  "_generatedAt": "2025-08-06T09:48:56.388Z",
+  "_source": "Generated from access-definition.ts files in /app/console",
+  "_warning": "DO NOT EDIT - This file is auto-generated. Edit module access-definition.ts files instead.",
+  "_stats": {
+    "totalGroups": 2,
+    "totalItems": 2,
+    "generatedBy": "scripts/generate-access-permissions.ts"
+  },
+  "groups": {
+    "user-management": {
+      "name": "User Management",
+      "description": "Manage users and user-related settings",
+      "icon": "users",
+      "order": 2,
+      "color": "#3b82f6"
+    },
+    "access-management": {
+      "name": "Access & Role Management",
+      "description": "Manage system access, roles, and permissions",
+      "icon": "shield-check",
+      "order": 1,
+      "color": "#ef4444"
+    }
+  },
+  "items": {
+    "user": {
+      "id": "user",
+      "group": "user-management",
+      "name": "User Management",
+      "description": "Manage user and user processing",
+      "path": "/console/user",
+      "permissions": [
+        "read",
+        "create",
+        "update",
+        "delete",
+        "cancel",
+        "confirm",
+        "process"
+      ]
+    },
+    "role": {
+      "id": "role",
+      "group": "access-management",
+      "name": "Role Management",
+      "description": "Manage role and role processing",
+      "path": "/console/role",
+      "permissions": [
+        "read",
+        "create",
+        "update",
+        "delete",
+        "cancel",
+        "confirm",
+        "process"
+      ]
+    }
+  }
+}
