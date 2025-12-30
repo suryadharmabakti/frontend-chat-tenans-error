@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -5,7 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import api from '../../services/api';
 
-export default function LoginPage() {
+export default function LoginForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: '',

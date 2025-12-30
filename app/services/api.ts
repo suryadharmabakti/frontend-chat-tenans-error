@@ -1,6 +1,6 @@
 'use client';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+// Tidak perlu API_URL karena pakai Next.js route
 
 interface LoginResponse {
   token: string;
@@ -14,7 +14,7 @@ interface LoginResponse {
 const api = {
   async login(email: string, password: string): Promise<LoginResponse> {
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch('/login/api', { // ← PERBAIKAN DI SINI
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

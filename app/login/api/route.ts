@@ -1,39 +1,46 @@
-import { NextRequest, NextResponse } from "next/server";
-import { authenticateUser } from "../logic/auth";
-import jwt from "jsonwebtoken";
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest) {
-    try {
-        const body = await req.json();
-        const { email, password } = body;
+export async function POST(request: NextRequest) {
+  try {
+    const { email, password } = await request.json();
 
-        const user = await authenticateUser(email, password);
+    console.log('Login attempt:', email);
 
-        if (!user) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+    // DUMMY LOGIN - untuk testing
+    // Nanti ganti dengan database real
+    if (email === 'test@gmail.com' && password === 'test123') {
+      const token = 'dummy-token-' + Date.now();
+      
+      const response = NextResponse.json({
+        user: {
+          id: '1',
+          email: email,
+          name: 'Test User'
+        },
+        token: token
+      });
 
-        const token = jwt.sign(
-            {
-                id: user.id,
-                email: user.email,
-                name: user.name,
-            },
-            process.env.JWT_SECRET!,
-            { expiresIn: "1d" }
-        );
+      // Set cookie (optional)
+      response.cookies.set('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/',
+      });
 
-        // Simpan user info di session cookie (contoh manual)
-        const response = NextResponse.json({ success: true, user });
-
-        response.cookies.set("token", token, {
-            httpOnly: true,
-            sameSite: "lax",
-            path: "/",
-            maxAge: 60 * 60 * 24, // 1 hari
-            secure: process.env.NODE_ENV === "production",
-        });
-
-        return response;
-    } catch (error: any) {
-        return NextResponse.json({ message: error.message }, { status: 400 })
+      return response;
     }
+
+    return NextResponse.json(
+      { message: 'Email atau password salah' },
+      { status: 401 }
+    );
+
+  } catch (error: any) {
+    console.error('Login error:', error);
+    return NextResponse.json(
+      { message: 'Server error: ' + error.message },
+      { status: 500 }
+    );
+  }
 }
