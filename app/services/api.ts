@@ -14,11 +14,12 @@ interface LoginResponse {
 const api = {
   async login(email: string, password: string): Promise<LoginResponse> {
     try {
-      const response = await fetch('/login/api', { // ← PERBAIKAN DI SINI
+      const response = await fetch('/login/api', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       });
 

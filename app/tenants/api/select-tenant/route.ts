@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import crypto from "node:crypto";
 import { selectTenant } from "../../logic/tenant";
 
 export async function POST(req: NextRequest) {
@@ -10,12 +11,16 @@ export async function POST(req: NextRequest) {
         const token = req.cookies.get("token")?.value;
         if (!token) throw new Error("Unauthorized");
 
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+        const devSecret = (globalThis as any).__DEV_JWT_SECRET ?? crypto.randomBytes(32).toString('hex');
+        if (!(globalThis as any).__DEV_JWT_SECRET) (globalThis as any).__DEV_JWT_SECRET = devSecret;
+        const jwtSecret = process.env.JWT_SECRET || devSecret;
+
+        const decoded: any = jwt.verify(token, jwtSecret);
         const fullUserData = await selectTenant(decoded.id, tenant_id);
 
         if (!fullUserData) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
 
-        const newToken = jwt.sign(fullUserData, process.env.JWT_SECRET!, { expiresIn: "1d" });
+        const newToken = jwt.sign(fullUserData, jwtSecret, { expiresIn: "1d" });
 
         const response = NextResponse.json({ success: true, user: fullUserData });
         response.cookies.set("token", newToken, {

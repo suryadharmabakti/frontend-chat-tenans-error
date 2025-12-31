@@ -30,13 +30,12 @@ export default function LoginForm() {
     setIsLoading(true);
     setError('');
     
-    try {
+  try {
       const result = await api.login(formData.email, formData.password);
       
-      localStorage.setItem('token', result.token);
-      localStorage.setItem('user', JSON.stringify(result.user));
+      localStorage.setItem('user_data', JSON.stringify(result.user));
       
-      router.push('/projects');
+      router.push('/tenants');
       
     } catch (error: any) {
       console.error('Login error:', error);

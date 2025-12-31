@@ -54,7 +54,7 @@ export default function Page() {
     const handleSelectTenant = async (tenant_uuid: any) => {
         setLoading(true);
         try {
-            const res = await fetch(`tenants/api/select-tenant`, {
+            const res = await fetch(`/tenants/api/select-tenant`, {
                 method: "POST",
                 body: JSON.stringify({ tenant_id: tenant_uuid }),
                 headers: { "Content-Type": "application/json" },
@@ -104,7 +104,7 @@ export default function Page() {
         setLoading(true)
 
         try {
-            const res = await fetch(`tenants/api?users.id=${user_id}`, {
+            const res = await fetch(`/tenants/api?users.id=${user_id}`, {
                 method: 'GET',
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -133,8 +133,8 @@ export default function Page() {
     }, [])
 
     useEffect(() => {
-        const getUser: any = localStorage.getItem("user_data");
-        if (getUser) setUser(JSON.parse(getUser));
+        const current = localStorage.getItem("user_data") || localStorage.getItem("user");
+        if (current) setUser(JSON.parse(current));
     }, []);
 
     useEffect(() => {
